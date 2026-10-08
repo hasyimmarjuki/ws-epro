@@ -1,23 +1,22 @@
 # verbose: 0=info, 1=verbose(debug), 2=very verbose(trace)
-verbose: 1
+verbose: 0
 
 # batas handshake, dial backend, dan seluruh koneksi aktif dalam satu proses
 network: { handshake_timeout: "15s", dial_timeout: "10s", max_connections: 1024 }
 
-# port-mapping (forwarder ws) — sembunyikan port asli. Opsional, paralel salome.
 listen:
   - target_host: 127.0.0.1 # alamat tujuan
-    target_port: 40000 # port tujuan
-    listen_port: 222 # :222 -> 127.0.0.1:22
+    target_port: 22 # port tujuan
+    listen_port: 8880 # :222 -> 127.0.0.1:22
+
 
 # multiplexer satu port
 salome:
-  enable: true # true = aktifkan fitur salome
-  listen: ":80" # port salome
-  websocket: { strict_handshake: true, selector_header: "X-Me" } # true = payload harus ada Sec-WebSocket-Key: [ws_key] dan Sec-Websocket-Version: 13
-  # legacy_loopback: { enable: false, listen: "127.0.0.1:1707" } # true = fallback lama diputar ulang lewat Salome
-  ssh: { addr: "127.0.0.1:40000", path: "" } # jika selector_header kosong, tambahkan path jika ingin support method GET .... HTTP/1.1 di payload HC
-  vpn: { addr: "127.0.0.1:1194", path: "" } # jika selector_header kosong, tambahkan path jika ingin support method GET .... HTTP/1.1 di payload HC
-  psi: { addr: "157.245.151.217:2222", path: "" } # 127.0.0.1:14433 - > agar support Fronted-meek, cek /etc/stunnel/stunnel.conf
-  v2ray: { ws: { addr: "127.0.0.1:10000", path: "/" }, raw: "127.0.0.1:10001" } # jika selector_header kosong, tambahkan path jika ingin ada v2ray yang support payload, path = transport asli
-  default: "127.0.0.1:10001" # jadikan v2ray tcp sebagai fallback agar support payload
+  enable: true
+  listen: ":80"
+  websocket: { strict_handshake: false, selector_header: "JagoanGroup" }
+  ssh: { addr: "127.0.0.1:888", path: "" }
+  ##vpn: { addr: "127.0.0.1:1194", path: "" } # jika selector_header kosong, tambahkan path jika ingin support method GET .... HTTP/1.1 di payload HC
+  ##psi: { addr: "157.245.151.217:2222", path: "" } # 127.0.0.1:14433 - > agar support Fronted-meek, cek /etc/stunnel/stunnel.conf
+  ##v2ray: { ws: { addr: "127.0.0.1:10000", path: "/" }, raw: "127.0.0.1:10001" } # jika selector_header kosong, tambahkan path jika ingin ada v2ray yang support payload, path = transport asli
+  ##default: "127.0.0.1:10001" # jadikan v2ray tcp sebagai fallback agar support payload
